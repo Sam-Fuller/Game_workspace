@@ -44,9 +44,19 @@ import colour.Colour;
 import graphics.Mesh;
 import graphics.MeshBuilder;
 import graphics.TexturedMesh;
-import javafx.util.Pair;
 import main.Settings;
 import runnable.Graphics;
+
+class textureInfo {
+	Integer image;
+	FontMetrics metrics;
+	
+	public textureInfo(Integer image, FontMetrics metrics) {
+		super();
+		this.image = image;
+		this.metrics = metrics;
+	}
+}
 
 public class TextLoader {
 	private static final String FontPath = "resources/fonts/telegrama/telegrama_render.otf";
@@ -67,9 +77,9 @@ public class TextLoader {
 
 	public static void init() {
 		largeSize = Settings.settings.textRes.getValue();
-		Pair<Integer, FontMetrics> data = generateTexture(largeSize);
-		largeFontMetrics = data.getValue();
-		largeImage = data.getKey();
+		textureInfo data = generateTexture(largeSize);
+		largeFontMetrics = data.metrics;
+		largeImage = data.image;
 	}
 	
 	public static int getLargeTextImage() {
@@ -156,7 +166,7 @@ public class TextLoader {
 		return meshBuilder;
 	}
 
-	private static Pair<Integer, FontMetrics> generateTexture(float size) {
+	private static textureInfo generateTexture(float size) {
 		try {
 			Font font = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File(FontPath)).deriveFont(size);
 
@@ -214,7 +224,7 @@ public class TextLoader {
 			
 			glBindTexture(GL_TEXTURE_2D, 0);
 			
-			return new Pair<Integer, FontMetrics>(textureID, fontMetrics);
+			return new textureInfo(textureID, fontMetrics);
 
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();

@@ -12,7 +12,7 @@ public abstract class Enemy extends Entity{
 	@Override
 	protected void incChunkNo(int inc) {
 		World.getWorld().get(getChunkNo()).getEntities().remove(this);
-		incChunkNo(1);
+		super.incChunkNo(1);
 		World.getWorld().get(getChunkNo()).getEntities().add(this);
 	}
 

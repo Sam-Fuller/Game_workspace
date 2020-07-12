@@ -8,7 +8,7 @@ import loader.TextureLoader;
 import runnable.Graphics;
 import state.World;
 
-public class Spikes extends StaticMelee{
+public class Spikes extends StaticMelee {
 	static final int dHeight = 1;
 	static final int dWidth = 1;
 
@@ -40,15 +40,8 @@ public class Spikes extends StaticMelee{
 	private void rerender() {
 		MeshBuilder meshBuilder = new MeshBuilder();
 
-		float height = Graphics.gridToScreenYScale(getHeight());
-		float width = Graphics.gridToScreenXScale(getWidth());
-		
-		//float xOffset = Graphics.gridToScreenXScale(-1) - 1;
-		//float yOffset = 1;
-
 		Colour enemyColour = Graphics.getColourScheme().enemySpikes();
-		
-		meshBuilder.drawTriangle(0, 0, width, height, 0, enemyColour, enemyColour);
+		meshBuilder.drawTriangle(0, 0, getHeight(), getWidth(), (float) Math.PI, enemyColour, enemyColour);
 
 		colourMesh = meshBuilder.asColourMesh(false);
 	}
@@ -62,6 +55,11 @@ public class Spikes extends StaticMelee{
 			float y = getPosY() + World.getOffsetY(getChunkNo()) - Player.getPlayer().getPosY();
 						
 			if (this.touchingSquarePlayer()) {
+				float a = Player.getPlayer().getPosX();
+				float b = Player.getPlayer().getPosY();
+				float c = getPosX();
+				float d = getPosY();
+				
 				Player.getPlayer().decHealth(damage);
 				lastDamage = now;
 

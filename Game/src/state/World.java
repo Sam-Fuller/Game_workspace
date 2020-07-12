@@ -20,26 +20,26 @@ import runnable.Graphics;
 
 public class World {
 	static List<Chunk> world = new ArrayList<Chunk>();
-	
+
 	public static List<Chunk> getWorld() {
 		return world;
 	}
 
 	public static void init() {
-		world.add(new LoadedChunk("resources/chunks/ShipChunk.png"));
-		//world.add(new GeneratedChunk(0, 2, GeneratedChunk.generatePerlin()));
-		
+		//world.add(new LoadedChunk("resources/chunks/ShipChunk.png"));
+		world.add(new GeneratedChunk(0, 2, GeneratedChunk.generatePerlin()));
+
 		generateMap();
 		generateMap();
 		generateMap();
-		
+
 		Game.worldGenThread.start();
 	}
 
 	public static void generateMap() {
 		if (world.size() - Player.getPlayer().getChunkNo() > 5) return;
-		
- 		world.add(new GeneratedChunk(world.size(), world.get(world.size()-1).getExit(), world.get(world.size()-1).getExitPerlin()));
+
+		world.add(new GeneratedChunk(world.size(), world.get(world.size()-1).getExit(), world.get(world.size()-1).getExitPerlin()));
 	}
 
 	//TODO improve to work on more than -1 0 and 1
@@ -54,7 +54,7 @@ public class World {
 
 		return getOffsetYrel(chunk);
 	}
-	
+
 	public static int getOffsetXrel(int chunk) {
 		if (chunk == -1) {
 			if (World.world.get(Player.getPlayer().getChunkNo()).getEntrance() == 1) 		return -World.world.get(Player.getPlayer().getChunkNo()-1).getLevelSize();
@@ -79,33 +79,42 @@ public class World {
 
 	public static void update(float frameSpeed) {
 		Player.getPlayer().update(frameSpeed);
-		
-		for (Chunk chunk: world) {
-			for (Entity entity: chunk.getEntities()) {
+
+		int playerChunk = Player.getPlayer().getChunkNo();
+
+		if (playerChunk > 0) {
+			for (Entity entity: world.get(playerChunk - 1).getEntities()) {
 				entity.update(frameSpeed);
 			}
 		}
+		for (Entity entity: world.get(playerChunk).getEntities()) {
+			entity.update(frameSpeed);
+		}
+		for (Entity entity: world.get(playerChunk + 1).getEntities()) {
+			entity.update(frameSpeed);
+		}
+
 	}
-	
+
 	public static void render() {
 		if (World.getWorld().size() < Player.getPlayer().getChunkNo()+2) {
 			generateMap();
 		}
-		
+
 		if (Player.getPlayer().getChunkNo() > 0) world.get(Player.getPlayer().getChunkNo()-1).render(getOffsetXrel(-1), getOffsetYrel(-1));
 		world.get(Player.getPlayer().getChunkNo()).render(getOffsetXrel(0), getOffsetYrel(0));
 		world.get(Player.getPlayer().getChunkNo()+1).render(getOffsetXrel(1), getOffsetYrel(1));
-		
+
 		Player.getPlayer().render();
-		
+
 		if (Player.getPlayer().getChunkNo() > 0)
 			for (Entity entity: world.get(Player.getPlayer().getChunkNo()-1).getEntities())
 				entity.render();
-		
+
 		for (Entity entity: world.get(Player.getPlayer().getChunkNo()).getEntities()) {
 			entity.render();
 		}
-		
+
 		for (Entity entity: world.get(Player.getPlayer().getChunkNo()+1).getEntities())
 			entity.render();
 	}

@@ -318,86 +318,90 @@ public abstract class Entity {
 
 		float entityWidth = getWidth();
 		float entityHeight = getHeight();
-
-		//if y coord is exact, yExact = -1 else yExact = 0
-		int yExact = 1;
-		if (fPosY == Math.ceil(fPosY)) {
-			yExact = 0;
-		}
-
-		//if moving left
-		if (this.getVelocityX() <= 0) {
-			int posX = (int) Math.ceil(fPosX);
-			int posXoff = (int) Math.ceil(fPosX-0.5f);
-			int posY = (int) fPosY;
-			int currentPosY;
-			int oX;
-			int oY;
-			int oC;
-
-			//check if inside a block
-			for (int n = 0; n < entityHeight+yExact; n++) {
-				currentPosY = posY - n - 1;
-
-				oX = getOffsetX(posX-entityWidth-1);
-				oY = getOffsetY(currentPosY);
-				oC = getOffsetChunk(posX-entityWidth-1, currentPosY);
-
-				if (World.getWorld().get(getChunkNo()+oC).getMap()[(int) (posX-entityWidth-1+oX)][(currentPosY+oY)*2]) {
-					if (isBounce()) setVelocityX(-getVelocityX());
-					else if (!isDestroy()) setVelocityX(0);
-
-					return posX - fPosX;
-				}
-
-				oX = getOffsetX(posXoff-entityWidth);
-				oC = getOffsetChunk(posXoff-entityWidth, currentPosY);
-
-				if (World.getWorld().get(getChunkNo()+oC).getMap()[(int) (posXoff-entityWidth+oX)][(int) ((currentPosY+oY)*2+1)]) {					
-					if (isBounce()) setVelocityX(-getVelocityX());
-					else if (!isDestroy()) setVelocityX(0);
-
-					return posX - fPosX - 0.5f;
-				}
-			}	
-		} 
-
+		
 		//if moving right
-		if (getVelocityX() >= 0) {
-			int posX = (int) -Math.ceil(-fPosX);
-			int posXoff = (int) -Math.ceil(-fPosX-0.5f);
-			int posY = (int) fPosY;
-			int currentPosY;
-			int oX;
-			int oY;
-			int oC;
+		if (getVelocityX() > 0) {
+			int entityTop = (int) Math.floor(fPosY - entityHeight/2);
+			int entityBottom = (int) Math.floor(fPosY + entityHeight/2);
 
-			//check if inside a block
-			for (int n = 0; n < entityHeight+yExact; n++) {
-				currentPosY = posY - n - 1;
+			int entityRight = (int) Math.floor(fPosX + entityWidth/2);
 
-				oX = getOffsetX(posX);
-				oY = getOffsetY(currentPosY);
-				oC = getOffsetChunk(posX, currentPosY);
+			int offsetX = getOffsetX(entityRight);
 
-				if (World.getWorld().get(getChunkNo()+oC).getMap()[posX+oX][(currentPosY+oY)*2]) {
+			for (int currentPosY = entityTop; currentPosY < entityBottom; currentPosY++) {
+				int offsetY = getOffsetY(currentPosY);
+				int offsetC = getOffsetChunk(entityRight, currentPosY);
+
+				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[entityRight+offsetX][(currentPosY+offsetY)*2]) {
 					if (isBounce()) setVelocityX(-getVelocityX());
 					else if (!isDestroy()) setVelocityX(0);
-
-					return posX - fPosX;
+					//setVelocityY(0);
+					
+					return (entityRight - (fPosX + entityWidth/2f));
 				}
+			}
+			
+			
+			entityRight = (int) Math.floor(fPosX + entityWidth/2 + 0.5f);
+			offsetX = getOffsetX(entityRight);
 
-				oX = getOffsetX(posXoff);
-				oC = getOffsetChunk(posXoff, currentPosY);
+			for (int currentPosY = entityTop; currentPosY < entityBottom; currentPosY++) {
+				int offsetY = getOffsetY(currentPosY);
+				int offsetC = getOffsetChunk(entityRight, currentPosY);
 
-				if (World.getWorld().get(getChunkNo()+oC).getMap()[posXoff+oX][(int) ((currentPosY+oY)*2+1)]) {
+				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[entityRight+offsetX][(currentPosY+offsetY)*2+1]) {
 					if (isBounce()) setVelocityX(-getVelocityX());
 					else if (!isDestroy()) setVelocityX(0);
-
-					return posX - fPosX + 0.5f;
+					//setVelocityY(0);
+					
+					return (entityRight - (fPosX + entityWidth/2f + 0.5f));
 				}
 			}
 		}
+		
+		//if moving left
+		else if (getVelocityX() < 0) {
+			int entityTop = (int) Math.ceil(fPosY - entityHeight/2);
+			int entityBottom = (int) Math.floor(fPosY + entityHeight/2);
+
+			int entityLeft = (int) Math.floor(fPosX - entityWidth/2);
+
+			int offsetX = getOffsetX(entityLeft);
+
+			for (int currentPosY = entityTop; currentPosY < entityBottom; currentPosY++) {
+				int offsetY = getOffsetY(currentPosY);
+				int offsetC = getOffsetChunk(entityLeft, currentPosY);
+
+				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[entityLeft+offsetX][(currentPosY+offsetY)*2]) {
+					if (isBounce()) setVelocityX(-getVelocityX());
+					else if (!isDestroy()) setVelocityX(0);
+					//setVelocityY(0);
+					
+					return 1 - ((fPosX - entityWidth/2f) - entityLeft);
+				}
+			}
+			
+			
+			entityLeft = (int) Math.floor(fPosX - entityWidth/2 + 0.5f);
+			offsetX = getOffsetX(entityLeft);
+
+			for (int currentPosY = entityTop; currentPosY < entityBottom; currentPosY++) {
+				int offsetY = getOffsetY(currentPosY);
+				int offsetC = getOffsetChunk(entityLeft, currentPosY);
+
+				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[entityLeft+offsetX][(currentPosY+offsetY)*2+1]) {
+					if (isBounce()) setVelocityX(-getVelocityX());
+					else if (!isDestroy()) setVelocityX(0);
+					//setVelocityY(0);
+					
+					return 1 - ((fPosX - entityWidth/2f + 0.5f) - entityLeft);
+				}
+			}
+		}
+		
+		
+		
+		
 
 		if(getDecelerate()) {
 			float velX = Math.abs(getPureVelocityX());
@@ -419,6 +423,7 @@ public abstract class Entity {
 
 		return finalSpeed;
 	}
+	
 	protected float getMovementY(float frameSpeed) {
 		float fPosX = getPosX();
 		float fPosY = getPosY();
@@ -426,99 +431,50 @@ public abstract class Entity {
 		float entityWidth = getWidth();
 		float entityHeight = getHeight();
 
-		//if y coord is exact, yExact = -1 else xExact = 0
-		int xExact = 1;
-		if (fPosX == Math.ceil(fPosX) || fPosX == Math.ceil(fPosX)-0.5f) {
-			xExact = 0;
-		}
-
-		//if moving down
+		//if moving down or stationary in the Y axis
 		if (getVelocityY() >= 0) {
-			int posX = (int) fPosX;
-			int posXoff = (int) (fPosX+0.5f);
-			int posY = (int) -Math.ceil(-fPosY);
-			int currentPosX;
-			int oX;
-			int oY = getOffsetY(posY);
-			int oC;
+			int entityBottom = (int) Math.floor(fPosY + entityHeight/2);
 
-			//check if inside a block
-			for (int n = -xExact; n < entityWidth; n++) {
-				currentPosX = posX - n - 1;
+			int entityLeft = (int) Math.floor(fPosX - entityWidth/2 +0.5f);
+			int entityRight = (int) Math.ceil(fPosX + entityWidth/2 +0.5f);
 
-				oX = getOffsetX(currentPosX);
-				oC = getOffsetChunk(currentPosX, posY);
+			int offsetY = getOffsetY(entityBottom);
 
-				if (World.getWorld().get(getChunkNo()+oC).getMap()[currentPosX+oX][(posY+oY)*2]) {
+			for (int currentPosX = entityLeft; currentPosX < entityRight; currentPosX++) {
+				int offsetX = getOffsetX(currentPosX);
+				int offsetC = getOffsetChunk(currentPosX, entityBottom);
+
+				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[currentPosX+offsetX][(entityBottom+offsetY)*2]) {
 					if (isBounce()) setVelocityY(-getVelocityY());
-					else if (!isDestroy()) {
-						setVelocityY(0);
-						setVelocityX(0);
-					}
+					else if (!isDestroy()) setVelocityY(0);
 
-					return posY - fPosY;
-				}
-
-				currentPosX = posXoff - n - 1;
-
-				oX = getOffsetX(currentPosX);
-				oC = getOffsetChunk(currentPosX, posY);
-
-				if (World.getWorld().get(getChunkNo()+oC).getMap()[currentPosX+oX][(posY+oY)*2+1]) {
-					if (isBounce()) setVelocityY(-getVelocityY());
-					else if (!isDestroy()) {
-						setVelocityY(0);
-						setVelocityX(0);
-					}
-
-					return posY - fPosY;
+					return entityBottom - (fPosY + entityHeight/2f);
 				}
 			}
 		}
 
 		//if moving up
-		if (getVelocityY() < 0) {
-			int posX = (int) fPosX;
-			int posXoff = (int) (fPosX+0.5f);
-			int posY = (int) Math.ceil(fPosY);
-			int currentPosX;
-			int oX; 
-			int oY = getOffsetY(posY-entityHeight-1); 
-			int oC;
+		else {
+			int entityTop = (int) Math.floor(fPosY - entityHeight/2);
 
-			//check if inside a block
-			for (int n = -xExact; n < entityWidth; n++) {
-				currentPosX = posX - n - 1;
+			int entityLeft = (int) Math.floor(fPosX - entityWidth/2 +0.5f);
+			int entityRight = (int) Math.ceil(fPosX + entityWidth/2 +0.5f);
 
-				oX = getOffsetX(currentPosX);
-				oC = getOffsetChunk(currentPosX, posY-entityHeight-1);
+			int offsetY = getOffsetY(entityTop);
 
-				if (World.getWorld().get(getChunkNo()+oC).getMap()[currentPosX+oX][(int) (posY-entityHeight-1+oY)*2]) {
+			for (int currentPosX = entityLeft; currentPosX < entityRight; currentPosX++) {
+				int offsetX = getOffsetX(currentPosX);
+				int offsetC = getOffsetChunk(currentPosX, entityTop);
+				
+				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[currentPosX+offsetX][(entityTop+offsetY)*2]) {
 					if (isBounce()) setVelocityY(-getVelocityY());
-					else if (!isDestroy()) {
-						setVelocityY(0);
-						setVelocityX(0);
-					}
+					else if (!isDestroy()) setVelocityY(0);
 
-					return posY - fPosY;
-				}
-
-				currentPosX = posXoff - n - 1;
-
-				oX = getOffsetX(currentPosX);
-				oC = getOffsetChunk(currentPosX, posY-entityHeight-1);
-
-				if (World.getWorld().get(getChunkNo()+oC).getMap()[(int) (currentPosX+oX)][(int) (posY-entityHeight-1+oY)*2+1]) {
-					if (isBounce()) setVelocityY(-getVelocityY());
-					else if (!isDestroy()) {
-						setVelocityY(0);
-						setVelocityX(0);
-					}
-
-					return posY - fPosY;
+					return (fPosY - entityHeight/2f) - entityTop;
 				}
 			}
 		}
+
 
 		if(getDecelerate()) {
 			float velY = Math.abs(getPureVelocityY());
@@ -601,30 +557,30 @@ public abstract class Entity {
 	}
 
 	protected void insideWall() {
-		if (isDestroy()) return;
-
-		float fPosX = getPosX();
-		float fPosY = getPosY();
-
-		float entityWidth = getWidth();
-
-		//if moving down
-		if (getVelocityY() >= 0) {
-			int posX = (int) fPosX;
-			int posY = (int) -Math.ceil(-fPosY+1); 
-			int oY = getOffsetY(posY);
-
-			//check if inside a block
-			int currentPosX = (int) (posX - entityWidth/2);
-
-			int oX = getOffsetX(currentPosX);
-			int oC = getOffsetChunk(currentPosX, posY);
-
-			if (World.getWorld().get(getChunkNo()+oC).getMap()[currentPosX+oX][(posY+oY)*2]) {
-				if (isBounce()) setVelocityY(-getVelocityY());
-				else if (!isDestroy()) incPosY(-1);
-			}
-		}
+		//		if (isDestroy()) return;
+		//
+		//		float fPosX = getPosX();
+		//		float fPosY = getPosY();
+		//
+		//		float entityWidth = getWidth();
+		//
+		//		//if moving down
+		//		if (getVelocityY() >= 0) {
+		//			int posX = (int) fPosX;
+		//			int posY = (int) -Math.ceil(-fPosY+1); 
+		//			int oY = getOffsetY(posY);
+		//
+		//			//check if inside a block
+		//			int currentPosX = (int) (posX);
+		//
+		//			int oX = getOffsetX(currentPosX);
+		//			int oC = getOffsetChunk(currentPosX, posY);
+		//
+		//			if (World.getWorld().get(getChunkNo()+oC).getMap()[currentPosX+oX][(posY+oY)*2]) {
+		//				if (isBounce()) setVelocityY(-getVelocityY());
+		//				else if (!isDestroy()) incPosY(-1);
+		//			}
+		//		}
 	}
 
 	protected void move(float frameSpeed) {
@@ -659,21 +615,34 @@ public abstract class Entity {
 		if (getPosY()+World.getOffsetY(getChunkNo())+getHeight()/2 < entity.getPosY()-entity.getHeight()/2) return false;
 		if (getPosY()+World.getOffsetY(getChunkNo())-getHeight()/2 > entity.getPosY()+entity.getHeight()/2) return false;
 
+		System.out.println(getPosX() +",	"+ getPosY());
+		System.out.println(entity.getPosX() +",	"+ entity.getPosY());
+		System.out.println();
+		System.out.println((getPosX()+World.getOffsetX(getChunkNo())+getWidth()/2) +",	"+ (entity.getPosX()-entity.getWidth()/2));
+		System.out.println((getPosX()+World.getOffsetX(getChunkNo())-getWidth()/2) +",	"+ (entity.getPosX()+entity.getWidth()/2));
+		System.out.println((getPosY()+World.getOffsetY(getChunkNo())+getHeight()/2) +",	"+ (entity.getPosY()-entity.getHeight()/2));
+		System.out.println((getPosY()+World.getOffsetY(getChunkNo())-getHeight()/2) +",	"+ (entity.getPosY()+entity.getHeight()/2));
+		System.out.println();
+		System.out.println((getPosX())+",	"+(getWidth()/2) +",	"+ (entity.getPosX())+",	"+(-entity.getWidth()/2));
+		System.out.println((getPosX())+",	"+(-getWidth()/2) +",	"+ (entity.getPosX())+",	"+(+entity.getWidth()/2));
+		System.out.println((getPosY())+",	"+(getHeight()/2) +",	"+ (entity.getPosY())+",	"+(-entity.getHeight()/2));
+		System.out.println((getPosY())+",	"+(-getHeight()/2) +",	"+ (entity.getPosY())+",	"+(+entity.getHeight()/2));
+
 		return true;
 	}
 
 	public boolean touchingSquarePlayer() {
 		return touchingSquare(Player.getPlayer());
-		
-//		//check X
-//		if (getPosX()+World.getOffsetX(getChunkNo())+getWidth() < Player.getPlayer().posX-3.5f) return false;
-//		if (getPosX()+World.getOffsetX(getChunkNo()) > Player.getPlayer().posX-3.5f+Player.getPlayer().getWidth()) return false;
-//
-//		//check Y
-//		if (getPosY()+World.getOffsetY(getChunkNo())+getHeight() < Player.getPlayer().posY-7) return false;
-//		if (getPosY()+World.getOffsetY(getChunkNo()) > Player.getPlayer().posY-7+Player.getPlayer().getHeight()) return false;
-//
-//		return true;
+
+		//		//check X
+		//		if (getPosX()+World.getOffsetX(getChunkNo())+getWidth() < Player.getPlayer().posX-3.5f) return false;
+		//		if (getPosX()+World.getOffsetX(getChunkNo()) > Player.getPlayer().posX-3.5f+Player.getPlayer().getWidth()) return false;
+		//
+		//		//check Y
+		//		if (getPosY()+World.getOffsetY(getChunkNo())+getHeight() < Player.getPlayer().posY-7) return false;
+		//		if (getPosY()+World.getOffsetY(getChunkNo()) > Player.getPlayer().posY-7+Player.getPlayer().getHeight()) return false;
+		//
+		//		return true;
 	}
 
 	protected abstract void onDestruction();

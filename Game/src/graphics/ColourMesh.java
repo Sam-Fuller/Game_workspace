@@ -169,8 +169,8 @@ public class ColourMesh implements Mesh{
     public void render(float x, float y) {
 		shaderProgram.bind();
 		if (isTransparent()) glEnable(GL_BLEND);
-		
-		shaderProgram.setUniform("cameraPosition", Player.getPlayer().getScreenPosX()+Graphics.gridToScreenXScale(-x), Player.getPlayer().getScreenPosY()+Graphics.gridToScreenYScale(-y));
+
+		shaderProgram.setUniform("cameraPosition", Player.getPlayer().getScreenPosX()+Graphics.gridToScreenXScale(-x), Player.getPlayer().getScreenPosY()-Graphics.gridToScreenYScale(-y));
 		shaderProgram.setUniform("cameraZoom", 1);
 		shaderProgram.setUniform("aspectRatio", (float)Settings.settings.xRes.getValue()/(float)Settings.settings.yRes.getValue());
 		shaderProgram.setUniform("litUniform", 0);

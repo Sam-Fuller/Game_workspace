@@ -10,7 +10,7 @@ import weapon.Shotgun;
 import weapon.Weapon;
 
 public class Player extends Entity{
-	static final int initialHealth = 80;
+	static final int initialHealth = 40;
 	
 	static final float defaultHeight = 5;
 	static final float defaultWidth = 3;
@@ -74,20 +74,11 @@ public class Player extends Entity{
 		return velY;
 	}
 	
-	@Override
-	public float getPosX() {
-		return posX-getWidth()/2f;
-	}
-	@Override
-	public float getPosY() {
-		return posY-getHeight()/2f;
-	}
-	
 	public float getScreenPosX() {
-		return Graphics.gridToScreenX(posX-getWidth());
+		return Graphics.gridToScreenX(posX);
 	}
 	public float getScreenPosY() {
-		return Graphics.gridToScreenY(posY-getHeight());
+		return Graphics.gridToScreenY(posY);
 	}
 	
 	public float getNextUpgrade() {
@@ -135,9 +126,9 @@ public class Player extends Entity{
 
 	public void gameStateChange() {
 		float x1 = Graphics.gridToScreenX(-player.getWidth()/2) + 1;
-		float x2 = Graphics.gridToScreenX(player.getWidth()/2) + 1;
+		float x2 = -x1;
 		float y1 = Graphics.gridToScreenY(-player.getHeight()/2) - 1;
-		float y2 = Graphics.gridToScreenY(player.getHeight()/2) - 1;
+		float y2 = -y1;
 		
 		MeshBuilder meshBuilder = new MeshBuilder();
 		

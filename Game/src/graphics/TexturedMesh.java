@@ -158,7 +158,7 @@ public class TexturedMesh implements Mesh{
 		shaderProgram.bind();
 		if (isTransparent()) glEnable(GL_BLEND);
 				
-		shaderProgram.setUniform("cameraPosition",Player.getPlayer().getScreenPosX()+Graphics.gridToScreenXScale(-x), Player.getPlayer().getScreenPosY()+Graphics.gridToScreenYScale(-y));
+		shaderProgram.setUniform("cameraPosition",Player.getPlayer().getScreenPosX()+Graphics.gridToScreenXScale(-x), Player.getPlayer().getScreenPosY()-Graphics.gridToScreenYScale(-y));
 		shaderProgram.setUniform("cameraZoom", 1);
 		
 		// Activate firs texture bank

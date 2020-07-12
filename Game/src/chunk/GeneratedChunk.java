@@ -218,7 +218,7 @@ public class GeneratedChunk implements Chunk {
 
 		//create enemies
 		//enemies.add(new SRDamageAura(levelSize/2, levelSize/2, level));
-		entities.add(new Spikes(160, 140, level));
+		//entities.add(new Spikes(150, 150, level));
 		//enemies.add(new MMDasher(levelSize/2, levelSize/2, level));
 	}
 
@@ -241,7 +241,7 @@ public class GeneratedChunk implements Chunk {
 				float y1 = yo;
 				float y2 = yo+1;
 
-				Colour caveColour = Graphics.getColourScheme().cave();
+				Colour caveColour = Graphics.getColourScheme().cave(); 
 
 				if (x >= 0) {
 					if (!map[x][y*2]) {

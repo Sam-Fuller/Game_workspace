@@ -269,7 +269,7 @@ public class Graphics implements Runnable {
 		return (2*x/gameX);
 	}
 	public static float gridToScreenYScale(float y) {
-		return (-2*y/gameY);
+		return (2*y/gameY);
 	}
 	
 	public static float resToGridx(float x) {
