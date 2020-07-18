@@ -185,7 +185,7 @@ public class Graphics implements Runnable {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		GameState.loadTextures();
-		TextLoader.init();
+		//TextLoader.init();
 		
 		ColourMesh.init();
 		TexturedMesh.init();

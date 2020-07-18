@@ -181,7 +181,7 @@ public class TTF {
 				}
 			}
 			
-			imageData.flip();
+			((Buffer) imageData).flip();
 			
 			int textureID = glGenTextures();
 			glBindTexture(GL_TEXTURE_2D, textureID);

@@ -335,7 +335,7 @@ public abstract class Entity {
 				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[entityRight+offsetX][(currentPosY+offsetY)*2]) {
 					if (isBounce()) setVelocityX(-getVelocityX());
 					else if (!isDestroy()) setVelocityX(0);
-					//setVelocityY(0);
+					setVelocityY(0);
 					
 					return (entityRight - (fPosX + entityWidth/2f));
 				}
@@ -352,7 +352,7 @@ public abstract class Entity {
 				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[entityRight+offsetX][(currentPosY+offsetY)*2+1]) {
 					if (isBounce()) setVelocityX(-getVelocityX());
 					else if (!isDestroy()) setVelocityX(0);
-					//setVelocityY(0);
+					setVelocityY(0);
 					
 					return (entityRight - (fPosX + entityWidth/2f + 0.5f));
 				}
@@ -375,7 +375,7 @@ public abstract class Entity {
 				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[entityLeft+offsetX][(currentPosY+offsetY)*2]) {
 					if (isBounce()) setVelocityX(-getVelocityX());
 					else if (!isDestroy()) setVelocityX(0);
-					//setVelocityY(0);
+					setVelocityY(0);
 					
 					return 1 - ((fPosX - entityWidth/2f) - entityLeft);
 				}
@@ -392,7 +392,7 @@ public abstract class Entity {
 				if (World.getWorld().get(getChunkNo()+offsetC).getMap()[entityLeft+offsetX][(currentPosY+offsetY)*2+1]) {
 					if (isBounce()) setVelocityX(-getVelocityX());
 					else if (!isDestroy()) setVelocityX(0);
-					//setVelocityY(0);
+					setVelocityY(0);
 					
 					return 1 - ((fPosX - entityWidth/2f + 0.5f) - entityLeft);
 				}

@@ -25,6 +25,7 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
@@ -98,7 +99,7 @@ public class ColourMesh implements Mesh{
             // Position VBO
             posVboId = glGenBuffers();
             posBuffer = MemoryUtil.memAllocFloat(positions.length);
-            posBuffer.put(positions).flip();
+            ((Buffer) posBuffer.put(positions)).flip();
             glBindBuffer(GL_ARRAY_BUFFER, posVboId);
             glBufferData(GL_ARRAY_BUFFER, posBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(0);
@@ -107,7 +108,7 @@ public class ColourMesh implements Mesh{
             // Colour VBO
             colourVboId = glGenBuffers();
             colourBuffer = MemoryUtil.memAllocFloat(colours.length);
-            colourBuffer.put(colours).flip();
+            ((Buffer) colourBuffer.put(colours)).flip();
             glBindBuffer(GL_ARRAY_BUFFER, colourVboId);
             glBufferData(GL_ARRAY_BUFFER, colourBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(1);
@@ -116,7 +117,7 @@ public class ColourMesh implements Mesh{
             // Index VBO
             idxVboId = glGenBuffers();
             indicesBuffer = MemoryUtil.memAllocInt(indices.length);
-            indicesBuffer.put(indices).flip();
+            ((Buffer) indicesBuffer.put(indices)).flip();
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxVboId);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 

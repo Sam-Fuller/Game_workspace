@@ -6,6 +6,7 @@ import entity.Player;
 import runnable.Graphics;
 import state.GameState;
 
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
@@ -84,7 +85,7 @@ public class TexturedMesh implements Mesh{
 			// Position VBO
 			posVboId = glGenBuffers();
 			posBuffer = MemoryUtil.memAllocFloat(positions.length);
-			posBuffer.put(positions).flip();
+			((Buffer) posBuffer.put(positions)).flip();
 			glBindBuffer(GL_ARRAY_BUFFER, posVboId);
 			glBufferData(GL_ARRAY_BUFFER, posBuffer, GL_STATIC_DRAW);
 			glEnableVertexAttribArray(0);
@@ -93,7 +94,7 @@ public class TexturedMesh implements Mesh{
 			// Texture coordinates VBO
 			texVboId = glGenBuffers();
 			textCoordsBuffer = MemoryUtil.memAllocFloat(textCoords.length);
-			textCoordsBuffer.put(textCoords).flip();
+			((Buffer) textCoordsBuffer.put(textCoords)).flip();
 			glBindBuffer(GL_ARRAY_BUFFER, texVboId);
 			glBufferData(GL_ARRAY_BUFFER, textCoordsBuffer, GL_STATIC_DRAW);
 			glEnableVertexAttribArray(1);
@@ -102,7 +103,7 @@ public class TexturedMesh implements Mesh{
 			// Index VBO
 			idxVboId = glGenBuffers();
 			indicesBuffer = MemoryUtil.memAllocInt(indices.length);
-			indicesBuffer.put(indices).flip();
+			((Buffer) indicesBuffer.put(indices)).flip();
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxVboId);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 

@@ -51,7 +51,7 @@ public class textureLoader {
 				buff.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
 			}
 			
-			buff.flip();
+			((Buffer) buff).flip();
 			
 			glBindTexture(GL_TEXTURE_2D, textureID);
 			

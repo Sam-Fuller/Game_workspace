@@ -33,7 +33,7 @@ public class Game {
 	
 	public static void main(String[] args) {
 		Settings.load();
-				
+		
 		Player.init();
 		
 		gameState = new GameState();
